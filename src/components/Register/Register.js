@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 class Register extends React.Component {
   constructor(props){
     super(props);
@@ -24,24 +23,25 @@ class Register extends React.Component {
   }
 
   onSubmitSignIn = () => {
-    fetch('http://localhost:3000/signin', {
+    fetch('http://localhost:3000/register', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        email: this.state.signInEmail,
-        password: this.state.signInPassword
+        email: this.state.email,
+        password: this.state.password,
+        name: this.state.name
       })
     })
       .then(response => response.json())
-      .then(data => {
-        if (data === 'success') {
+      .then(user => {
+        if (user) {
+          this.props.loadUser(user);
           this.props.onRouteChange('home');
         }
       })
   }
 
   render() {
-    const { onRouteChange } = this.props;
     return (
       <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
         <main className="pa4 black-80">
@@ -80,7 +80,12 @@ class Register extends React.Component {
               </div>
             </fieldset>
             <div className="">
-              <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Register" onClick={() => onRouteChange('home')} />
+              <input 
+                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" 
+                type="submit" 
+                value="Register" 
+                onClick={this.onSubmitSignIn} 
+              />
             </div>
           </div>
         </main>
